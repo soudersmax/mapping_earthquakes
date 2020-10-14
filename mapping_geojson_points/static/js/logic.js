@@ -1,30 +1,11 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
-// Create the map object with center at the San Francisco airport.
-let map = L.map('mapid').setView([37.5, -122.5], 10);
+// Create the map object with center and zoom level.
+let map = L.map('mapid').setView([30, 30], 2);
 
-// Add GeoJSON data.
-let sanFranAirport =
-{"type":"FeatureCollection","features":[{
-    "type":"Feature",
-    "properties":{
-        "id":"3469",
-        "name":"San Francisco International Airport",
-        "city":"San Francisco",
-        "country":"United States",
-        "faa":"SFO",
-        "icao":"KSFO",
-        "alt":"13",
-        "tz-offset":"-8",
-        "dst":"A",
-        "tz":"America/Los_Angeles"},
-        "geometry":{
-            "type":"Point",
-            "coordinates":[-122.375,37.61899948120117]}}
-]};
 
-// Grabbing our GeoJSON data - 2 methods
+// Grabbing our GeoJSON data and adding markers - 2 methods
 
 // Method1: pointToLayer callback function
     // add 2 arguments, pointToLayer function and data, where data is the sanFranAirport data
@@ -43,18 +24,31 @@ let sanFranAirport =
     // add two arguments, onEachFeature fxn and data, where data is sanFranAirport
     // oef calls an anonymous fxn, passed each geojson feature and properties as layer
 
-L.geoJson(sanFranAirport, {
-  onEachFeature: function(feature, layer) {
-      console.log(layer);
-      layer.bindPopup();
-  }
-}).addTo(map);
+        //L.geoJson(sanFranAirport, {
+        //    onEachFeature: function(feature, layer) {
+        //        console.log(layer);
+        //        layer.bindPopup();
+        //      }
+        //   }).addTo(map);
 
 // Add tile layer for the background of map
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
+});
+
+// Add GeoJSON data from github link
+let airportData = "https://raw.githubusercontent.com/soudersmax/mapping_earthquakes/mapping_geojson_objects/majorAirports.json"
+
+// Grabbing our GeoJSON data - external method
+// access the json data in the d3 promise
+// add anonymous function with data parameter (referencing airport data)
+// pass the data to the geoJSON layer and add to map
+d3.json(airportData).then(function(data) {
+    console.log(data);
+  // Creating a GeoJSON layer with the retrieved data
+  L.geoJson(data).addTo(map);
 });
 
 // Then add 'graymap' tile layer to "map"
