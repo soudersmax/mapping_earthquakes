@@ -1,42 +1,37 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
-// Create the map object with center and zoom level.
-let map = L.map('mapid').setView([30, 30], 2);
-
-
-// Grabbing our GeoJSON data and adding markers - 2 methods
-
-// Method1: pointToLayer callback function
-    // add 2 arguments, pointToLayer function and data, where data is the sanFranAirport data
-    // ptl calls a function, passed each geojson feature and it's latitude and longitude as latlng
-    // adds marker for each feature by using return marker at the latlng
-
-        //L.geoJSON(sanFranAirport, {
-        //    pointToLayer: function(feature, latlng) {
-        //        console.log(feature);
-        //        return L.marker(latlng)
-        //        .bindPopup("<h2>" + feature.properties.city + "</h2>");
-        //      }
-        //  }).addTo(map);
-        
-// Method2: onEachFeature callback function
-    // add two arguments, onEachFeature fxn and data, where data is sanFranAirport
-    // oef calls an anonymous fxn, passed each geojson feature and properties as layer
-
-        //L.geoJson(sanFranAirport, {
-        //    onEachFeature: function(feature, layer) {
-        //        console.log(layer);
-        //        layer.bindPopup();
-        //      }
-        //   }).addTo(map);
-
-// Add tile layer for the background of map
+// Add tile layer for the default background of map
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
 });
+
+// Add the dark view tile layer that will be an option for our map.
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
+
+// Create a base layer that holds both maps.
+let baseMaps = {
+    Street: streets,
+    Dark: dark
+};
+
+// Create the map object with center, zoom level and default layer.
+// review "alternate method" from simple map
+let map = L.map('mapid', {
+    center: [30, 30],
+    zoom: 2,
+    layers: [streets]
+})
+
+// Pass our map layers into our layers control and add the layers control to the map.
+// passed the argument baseMaps (the base layer objhect)
+L.control.layers(baseMaps).addTo(map);
 
 // Add GeoJSON data from github link
 let airportData = "https://raw.githubusercontent.com/soudersmax/mapping_earthquakes/mapping_geojson_objects/majorAirports.json"
@@ -51,5 +46,3 @@ d3.json(airportData).then(function(data) {
   L.geoJson(data).addTo(map);
 });
 
-// Then add 'graymap' tile layer to "map"
-streets.addTo(map);
