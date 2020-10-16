@@ -1,4 +1,4 @@
-## Basic Project Plan
+## Mapping Earthquakes with Leaflet.js, MapBox, and GeoJSON
 
 #### Purpose
 
@@ -6,10 +6,12 @@ The purpose of this project is to visually show the differences between the magn
 
 #### Tasks
 
-To complete this project, use a URL for GeoJSON earthquake data from the USGS website and retrieve geographical coordinates and the magnitudes of earthquakes for the last seven days. Then add the data to a map.
+1. Create maps using the MapBox API and customize with Leaflet.js
+2. Add background tile layers and data layers
+3. Add styling to data layers
+4. Add a legend and layer control objects to the map
 
 #### Approach
 
-Your approach will be to use the JavaScript and the D3.js library to retrieve the coordinates and magnitudes of the earthquakes from the GeoJSON data. You'll use the Leaflet library to plot the data on a Mapbox map through an API request and create interactivity for the earthquake data.
+I  used the JavaScript and the D3.js library to retrieve the coordinates and magnitudes of the earthquakes from GeoJSON data. Then I used the Leaflet library to plot the data on a Mapbox map through an API request and create interactivity for the earthquake data.
 
-Now that you have an overview of the project plan, let's set up a Mapbox account and get the API token you'll need to create geographical maps.
